@@ -1,0 +1,76 @@
+<h1>Hola</h1>
+
+<c-container>
+  <button (click)="toggleAddClientModal()" cButton color="primary">Add Cliente</button>
+
+  <!-- Add Client Modal -->
+  <c-modal id="addClientModal" [visible]="addClientModalVisible" (visibleChange)="handleAddClientModalChange($event)">
+    <c-modal-header>
+      <h5 cModalTitle>Add Cliente</h5>
+      <button (click)="toggleAddClientModal()" cButtonClose></button>
+    </c-modal-header>
+    <c-modal-body>
+      <form>
+        <div class="mb-3">
+          <label cLabel for="clientName">Nombre del Cliente</label>
+          <input cFormControl id="clientName" type="text" class="form-control" />
+        </div>
+        <div class="mb-3">
+          <label cLabel for="companyName">Nombre de la Empresa</label>
+          <input cFormControl id="companyName" type="text" class="form-control" />
+        </div>
+      </form>
+    </c-modal-body>
+    <c-modal-footer>
+      <button type="button" (click)="toggleAddClientModal()" cButton color="secondary">Close</button>
+      <button type="button" cButton color="primary">Save changes</button>
+    </c-modal-footer>
+  </c-modal>
+
+  <!-- Table -->
+  <c-card class="mt-4">
+    <c-card-body>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Nombre de la Empresa</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Juan Perez</td>
+            <td>Empresa XYZ</td>
+            <td>
+              <button (click)="toggleAddPaymentModal()" cButton color="success">Agregar Pago</button>
+            </td>
+          </tr>
+          <!-- ...more rows as needed... -->
+        </tbody>
+      </table>
+    </c-card-body>
+  </c-card>
+
+  <!-- Add Payment Modal -->
+  <c-modal id="addPaymentModal" [visible]="addPaymentModalVisible" (visibleChange)="handleAddPaymentModalChange($event)">
+    <c-modal-header>
+      <h5 cModalTitle>Agregar Pago</h5>
+      <button (click)="toggleAddPaymentModal()" cButtonClose></button>
+    </c-modal-header>
+    <c-modal-body>
+      <form>
+        <div class="mb-3">
+          <label cLabel for="paymentAmount">Cantidad</label>
+          <input cFormControl id="paymentAmount" type="number" class="form-control" value="100" />
+        </div>
+      </form>
+    </c-modal-body>
+    <c-modal-footer>
+      <button type="button" (click)="toggleAddPaymentModal()" cButton color="secondary">Close</button>
+      <button type="button" cButton color="primary">Save changes</button>
+    </c-modal-footer>
+  </c-modal>
+</c-container>

@@ -28,5 +28,12 @@ export const routes: Routes = [
     data: {
       title: 'Register Page'
     }
-  }
+  },
+  {
+    path: 'users',
+    loadComponent: () => import('./users/users.component').then(m => m.UsersComponent),
+    data: {
+      title: 'Users Page'
+    }
+  },
 ];
