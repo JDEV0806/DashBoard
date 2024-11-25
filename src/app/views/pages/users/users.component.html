@@ -10,21 +10,41 @@
       <button (click)="toggleAddClientModal()" cButtonClose></button>
     </c-modal-header>
     <c-modal-body>
-      <form>
+      <form [formGroup]="clientForm" (ngSubmit)="onSubmit()">
         <div class="mb-3">
-          <label cLabel for="clientName">Nombre del Cliente</label>
-          <input cFormControl id="clientName" type="text" class="form-control" />
+          <label cLabel for="nombre">Nombre completo</label>
+          <input cFormControl id="nombre" formControlName="nombre" type="text" class="form-control" placeholder="Ingrese el nombre completo" required />
         </div>
         <div class="mb-3">
-          <label cLabel for="companyName">Nombre de la Empresa</label>
-          <input cFormControl id="companyName" type="text" class="form-control" />
+          <label cLabel for="email">Correo electrónico</label>
+          <input cFormControl id="email" formControlName="email" type="email" class="form-control" placeholder="Ingrese el correo electrónico" />
+        </div>
+        <div class="mb-3">
+          <label cLabel for="telefono">Teléfono</label>
+          <input cFormControl id="telefono" formControlName="telefono" type="tel" class="form-control" placeholder="Ingrese el número de teléfono" pattern="[0-9]{10}" />
+        </div>
+        <div class="mb-3">
+          <label cLabel for="direccion">Dirección</label>
+          <textarea cFormControl id="direccion" formControlName="direccion" class="form-control" placeholder="Ingrese la dirección completa"></textarea>
+        </div>
+        <div class="mb-3">
+          <label cLabel for="filtro_nombre">Nombre del filtro</label>
+          <input cFormControl id="filtro_nombre" formControlName="filtro_nombre" type="text" class="form-control" placeholder="Ingrese el nombre del filtro" required />
+        </div>
+        <div class="mb-3">
+          <label cLabel for="precio_unitario">Precio unitario del filtro</label>
+          <input cFormControl id="precio_unitario" formControlName="precio_unitario" type="number" class="form-control" placeholder="Ingrese el precio unitario del filtro" step="0.01" min="0" required />
+        </div>
+        <div class="mb-3">
+          <label cLabel for="descripcion_filtro">Descripción del filtro</label>
+          <textarea cFormControl id="descripcion_filtro" formControlName="descripcion_filtro" class="form-control" placeholder="Ingrese una descripción detallada del filtro"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" (click)="toggleAddClientModal()" cButton color="secondary">Close</button>
+          <button type="submit" cButton color="primary" [disabled]="!clientForm.valid">Save changes</button>
         </div>
       </form>
     </c-modal-body>
-    <c-modal-footer>
-      <button type="button" (click)="toggleAddClientModal()" cButton color="secondary">Close</button>
-      <button type="button" cButton color="primary">Save changes</button>
-    </c-modal-footer>
   </c-modal>
 
   <!-- Table -->
@@ -61,12 +81,28 @@
       <button (click)="toggleAddPaymentModal()" cButtonClose></button>
     </c-modal-header>
     <c-modal-body>
+      <div class="mb-3">
+        <h6>Nombre: Juan Perez</h6>
+        <h6>Empresa: Empresa XYZ</h6>
+        <h6>Nombre del Filtro: Filtro ABC</h6>
+        <h6>Descripción del Filtro: Este es un filtro de ejemplo.</h6>
+        <h6>Precio Unitario: $100.00</h6>
+      </div>
       <form>
         <div class="mb-3">
-          <label cLabel for="paymentAmount">Cantidad</label>
+          <label cLabel for="paymentAmount">Cantidad a Pagar</label>
           <input cFormControl id="paymentAmount" type="number" class="form-control" value="100" />
         </div>
       </form>
+      <div class="mt-4">
+        <h5>Historial de Pagos</h5>
+        <ul class="list-group">
+          <li class="list-group-item">Pago 1: $100.00</li>
+          <li class="list-group-item">Pago 2: $150.00</li>
+          <li class="list-group-item">Pago 3: $200.00</li>
+          <!-- ...more payments as needed... -->
+        </ul>
+      </div>
     </c-modal-body>
     <c-modal-footer>
       <button type="button" (click)="toggleAddPaymentModal()" cButton color="secondary">Close</button>
