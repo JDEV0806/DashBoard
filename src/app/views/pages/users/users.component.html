@@ -1,12 +1,10 @@
-<h1>Hola</h1>
-
 <c-container>
-  <button (click)="toggleAddClientModal()" cButton color="primary">Add Cliente</button>
+  <button (click)="toggleAddClientModal()" cButton color="primary">Añadir cliente</button>
 
   <!-- Add Client Modal -->
   <c-modal id="addClientModal" [visible]="addClientModalVisible" (visibleChange)="handleAddClientModalChange($event)">
     <c-modal-header>
-      <h5 cModalTitle>Add Cliente</h5>
+      <h5 cModalTitle>Añadir Cliente</h5>
       <button (click)="toggleAddClientModal()" cButtonClose></button>
     </c-modal-header>
     <c-modal-body>
@@ -56,19 +54,24 @@
             <th>ID</th>
             <th>Nombre</th>
             <th>Nombre de la Empresa</th>
+            <th>Estado</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Juan Perez</td>
-            <td>Empresa XYZ</td>
+          <tr *ngFor="let client of clients">
+            <td>{{ client.cliente_id }}</td>
+            <td>{{ client.nombre }}</td>
+            <td>{{ client.filtro_nombre }}</td>
             <td>
-              <button (click)="toggleAddPaymentModal()" cButton color="success">Agregar Pago</button>
+              <span [ngClass]="{'text-warning': client.estado === 'No Pagado', 'text-primary': client.estado === 'Pagado'}">
+                {{ client.estado }}
+              </span>
+            </td>
+            <td>
+              <button (click)="getOrders(client.cliente_id)" cButton color="success">Agregar Pago</button>
             </td>
           </tr>
-          <!-- ...more rows as needed... -->
         </tbody>
       </table>
     </c-card-body>
@@ -81,32 +84,51 @@
       <button (click)="toggleAddPaymentModal()" cButtonClose></button>
     </c-modal-header>
     <c-modal-body>
-      <div class="mb-3">
-        <h6>Nombre: Juan Perez</h6>
-        <h6>Empresa: Empresa XYZ</h6>
-        <h6>Nombre del Filtro: Filtro ABC</h6>
-        <h6>Descripción del Filtro: Este es un filtro de ejemplo.</h6>
-        <h6>Precio Unitario: $100.00</h6>
+      <div class="mb-3" *ngIf="selectedClient">
+        <h6>Nombre: {{ selectedClient.nombre }}</h6>
+        <h6>Empresa: {{ selectedClient.filtro_nombre }}</h6>
+        <h6>Descripción del Filtro: {{ selectedClient.descripcion_filtro }}</h6>
+        <h6>Precio Unitario: {{ selectedClient.precio_unitario }}</h6>
+        <h6>Falta por Pagar: {{ remainingAmount }}</h6>
       </div>
-      <form>
+      <form [formGroup]="paymentForm" (ngSubmit)="addPayment()">
         <div class="mb-3">
-          <label cLabel for="paymentAmount">Cantidad a Pagar</label>
-          <input cFormControl id="paymentAmount" type="number" class="form-control" value="100" />
+          <label cLabel for="monto_pagado">Monto a Pagar</label>
+          <input cFormControl id="monto_pagado" formControlName="monto_pagado" type="number" class="form-control" [max]="remainingAmount" />
+        </div>
+        <div class="mb-3">
+          <label cLabel for="metodo_pago">Método de Pago</label>
+          <input cFormControl id="metodo_pago" formControlName="metodo_pago" type="text" class="form-control" />
+        </div>
+        <div class="modal-footer">
+          <button type="button" (click)="toggleAddPaymentModal()" cButton color="secondary">Close</button>
+          <button type="submit" cButton color="primary" [disabled]="!paymentForm.valid">Save changes</button>
         </div>
       </form>
       <div class="mt-4">
         <h5>Historial de Pagos</h5>
         <ul class="list-group">
-          <li class="list-group-item">Pago 1: $100.00</li>
-          <li class="list-group-item">Pago 2: $150.00</li>
-          <li class="list-group-item">Pago 3: $200.00</li>
-          <!-- ...more payments as needed... -->
+          <li class="list-group-item" *ngFor="let payment of payments">
+            Pago ID: {{ payment.pago_id }} - Monto Pagado: {{ payment.monto_pagado }} - Método de Pago: {{ payment.metodo_pago }}
+          </li>
+          <li class="list-group-item" *ngIf="payments.length === 0">Aún no ha dado el primer pago</li>
         </ul>
       </div>
     </c-modal-body>
-    <c-modal-footer>
-      <button type="button" (click)="toggleAddPaymentModal()" cButton color="secondary">Close</button>
-      <button type="button" cButton color="primary">Save changes</button>
-    </c-modal-footer>
   </c-modal>
+
+  <!-- Charts -->
+  <c-card class="mt-4">
+    <c-card-body>
+      <h5>Bar Chart</h5>
+      <c-chart type="bar" [data]="barChartData"></c-chart>
+    </c-card-body>
+  </c-card>
+
+  <c-card class="mt-4">
+    <c-card-body>
+      <h5>Pie Chart</h5>
+      <c-chart type="pie" [data]="pieChartData"></c-chart>
+    </c-card-body>
+  </c-card>
 </c-container>
